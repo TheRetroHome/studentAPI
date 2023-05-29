@@ -9,10 +9,7 @@ class Lecture extends Model
 {
     use HasFactory;
     protected $fillable = ['name','description'];
-    public function classes(){
-        return $this->belongsToMany(Grade::class,'class_lecture');
-    }
-    public function students(){
-        return $this->belongsToMany(Student::class,'lecture_student');
+    public function grades(){
+        return $this->belongsToMany(Grade::class, 'class_lecture')->withPivot('order');
     }
 }

@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','email'];
+    protected $fillable = ['name','email','grade_id'];
     public function grade(){
         return $this->belongsTo(Grade::class);
     }
     public function lectures(){
-        return $this->belongsToMany(Lecture::class,'lecture_student');
+        return $this->belongsToMany(Lecture::class,'student_lecture');
     }
 }

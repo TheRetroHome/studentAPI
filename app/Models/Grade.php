@@ -12,6 +12,6 @@ class Grade extends Model
         return $this->hasMany(Student::class);
     }
     public function lectures(){
-        return $this->belongsToMany(Lecture::class,'class_lecture');
+        return $this->belongsToMany(Lecture::class, 'class_lecture')->withPivot('order')->orderBy('pivot_order');
     }
 }
