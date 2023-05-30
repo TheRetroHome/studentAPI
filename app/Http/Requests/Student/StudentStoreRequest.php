@@ -24,7 +24,7 @@ class StudentStoreRequest extends FormRequest
         return [
             'name'=>'required',
             'email'=>'required|email|unique:students,email',
-            'grade_id'=>'required|exists:grade,id'
+            'grade_id'=>'required|exists:grades,id'
         ];
     }
     public function messages()

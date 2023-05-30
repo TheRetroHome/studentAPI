@@ -17,7 +17,7 @@ class GradeController extends Controller
      */
     public function index()
     {
-        $grades = Grade::all();
+        $grades = Grade::withLectures()->get(); //eagle загрузка
         return response()->json($grades);
     }
 
@@ -36,7 +36,7 @@ class GradeController extends Controller
      */
     public function show(Grade $grade)
     {
-        return response()->json($grade);
+        return response()->json($grade->load(['students', 'lectures']));
     }
 
     /**
@@ -54,6 +54,7 @@ class GradeController extends Controller
      */
     public function destroy(Grade $grade)
     {
+        $grade->students()->detachStudents();
         $grade->delete();
         return response()->json(null,204);
     }
@@ -62,30 +63,16 @@ class GradeController extends Controller
         // Получаем проверенные данные из запроса
         $validated = $request->validated();
 
-        // Начинаем транзакцию для обеспечения целостности данных
-        DB::beginTransaction();
-
         try {
-            // Сначала удаляем все текущие связи между классом и лекциями
-            $grade->lectures()->detach();
-
-            // Теперь создаем новые связи с обновленным порядком
-            foreach ($validated['lectures'] as $order => $lectureId) {
-                $grade->lectures()->attach($lectureId, ['order' => $order]);
-            }
-
-            // Если все прошло без ошибок, подтверждаем транзакцию
-            DB::commit();
+            // Обновляем учебный план
+            $grade = $grade->updatePlan($validated['lectures']);
 
             // Возвращаем ответ с успехом
             return response()->json([
                 'message' => 'Учебный план успешно обновлен.',
-                'grade' => $grade->load('lectures'),  // Загружаем обновленные лекции с помощью "жадной" загрузки
+                'grade' => $grade,  // grade уже содержит обновленные лекции
             ]);
         } catch (\Exception $e) {
-            // В случае ошибки откатываем транзакцию
-            DB::rollback();
-
             // Возвращаем ответ с ошибкой
             return response()->json([
                 'message' => 'Произошла ошибка при обновлении учебного плана.',
@@ -93,7 +80,4 @@ class GradeController extends Controller
             ], 500);
         }
     }
-
-
-
 }

@@ -14,7 +14,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $students = Student::with('lectures')->get(); //eagle загрузка
         return response()->json($students);
     }
 
@@ -33,7 +33,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        return response()->json($student);
+        return response()->json($student->load('lectures')); //Какие лекции закреплены за студентом
     }
 
     /**

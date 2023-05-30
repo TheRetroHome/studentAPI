@@ -24,7 +24,7 @@ class StudentUpdateRequest extends FormRequest
         return [
             'name'=>'sometimes|required',
             'email'=>'sometimes|required|email|unique:students,email,' . $this->student->id,
-            'grade_id'=>'sometimes|required|exists:grade,id'
+            'grade_id'=>'sometimes|required|exists:grades,id'
         ];
     }
     public function messages()

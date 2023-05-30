@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\GradeController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::apiResource('student', StudentController::class);
-Route::apiResource('lecture', LectureController::class);
-Route::apiResource('grade', GradeController::class);
+Route::apiResource('students', StudentController::class);
+Route::apiResource('lectures', LectureController::class);
+Route::apiResource('grades', GradeController::class);
 Route::put('grades/{grade}/update-plan',[GradeController::class,'updatePlan']);

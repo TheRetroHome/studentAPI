@@ -14,9 +14,10 @@ class LectureController extends Controller
      */
     public function index()
     {
-        $lectures = Lecture::all();
+        $lectures = Lecture::with(['grades', 'students'])->get(); //eagle загрузка
         return response()->json($lectures);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -33,6 +34,7 @@ class LectureController extends Controller
      */
     public function show(Lecture $lecture)
     {
+        $lecture->load(['grades','students']); //Информация о том какие классы и студенты прослушали лекцию
         return response()->json($lecture);
     }
 
