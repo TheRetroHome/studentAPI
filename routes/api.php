@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('student', StudentController::class);
 Route::apiResource('lecture', LectureController::class);
 Route::apiResource('grade', GradeController::class);
+Route::put('grades/{grade}/update-plan',[GradeController::class,'updatePlan']);
